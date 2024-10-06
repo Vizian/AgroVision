@@ -1,7 +1,7 @@
 import asyncio
 import earthaccess
 import os
-from datetime import datetime  # Import datetime for date checks
+from datetime import datetime  
 from aiogram import Bot, Dispatcher, types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -9,10 +9,9 @@ from aiogram.filters import Command
 from aiogram.types import FSInputFile
 from aiogram.fsm.storage.memory import MemoryStorage
 from file_access import download_data
-from visualisation import visualize_smap_data  # Import functions for download and visualization
+from visualisation import visualize_smap_data 
 
-API_TOKEN = os.getenv('API_TOKEN')  # Replace with your actual bot token
-
+API_TOKEN = os.getenv('API_TOKEN')
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
 storage = MemoryStorage()
@@ -21,7 +20,7 @@ dp = Dispatcher(storage=storage, bot=bot)
 # Define states for finite state machine (FSM)
 class FormStates(StatesGroup):
     waiting_for_coordinates = State()
-    waiting_for_data_type = State()  # New state for data type selection
+    waiting_for_data_type = State() 
     waiting_for_date = State()
 
 @dp.message(Command('start'))
@@ -56,7 +55,7 @@ async def handle_coordinates(message: types.Message, state: FSMContext):
                              "3. Surface temperature\n"
                              "4. Soil temperature")
         
-        await state.set_state(FormStates.waiting_for_data_type)  # Move to the next state
+        await state.set_state(FormStates.waiting_for_data_type)
     except ValueError:
         await message.answer("Invalid format. Please send coordinates in the format 'longitude, latitude'.\nFor example: 29.631, 30.968")
 
@@ -74,7 +73,7 @@ async def handle_data_type(message: types.Message, state: FSMContext):
     selected_type = message.text.strip()
     
     if selected_type in data_type_mapping:
-        await state.update_data(data_type=data_type_mapping[selected_type][0])  # Store the key
+        await state.update_data(data_type=data_type_mapping[selected_type][0]) 
         await message.answer(f"You selected: {data_type_mapping[selected_type][1]}\n"
                              "Enter the date in the format YYYY-MM-DD.\nFor example: 2022-02-05")
         await state.set_state(FormStates.waiting_for_date)
@@ -131,7 +130,7 @@ async def handle_date(message: types.Message, state: FSMContext):
         await message.answer("Data successfully downloaded, please wait...")
 
         output_image_paths = []
-        file = downloaded_files[0]  # Assume that the first downloaded file is the one we want to visualize
+        file = downloaded_files[0] 
 
         # Visualize the data and check the result
         global_image_path, zoomed_image_path = visualize_smap_data(file, bounding_box, data_type, "SMAP Data", [latitude, longitude])  # Added coordinates
