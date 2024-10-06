@@ -1,7 +1,7 @@
 import asyncio
 import earthaccess
 import os
-from datetime import datetime  # Import datetime for date checks
+from datetime import datetime
 from aiogram import Bot, Dispatcher, types
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
@@ -9,9 +9,9 @@ from aiogram.filters import Command
 from aiogram.types import FSInputFile
 from aiogram.fsm.storage.memory import MemoryStorage
 from file_access import download_data
-from visualisation import visualize_smap_data  # Import functions for download and visualization
+from visualisation import visualize_smap_data 
 
-API_TOKEN = os.getenv('API_TOKEN')  # Replace with your actual bot token
+API_TOKEN = os.getenv('API_TOKEN')  # Replace with your actual bot token or use .env
 
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
@@ -21,7 +21,7 @@ dp = Dispatcher(storage=storage, bot=bot)
 # Define states for finite state machine (FSM)
 class FormStates(StatesGroup):
     waiting_for_coordinates = State()
-    waiting_for_data_type = State()  # New state for data type selection
+    waiting_for_data_type = State() 
     waiting_for_date = State()
 
 @dp.message(Command('start'))
@@ -133,7 +133,7 @@ async def handle_date(message: types.Message, state: FSMContext):
         global_image_path, zoomed_image_path = visualize_smap_data(file, bounding_box, data_type, "SMAP Data", [latitude, longitude])  # Added coordinates
         if global_image_path is None or zoomed_image_path is None:
             await message.answer("Visualization failed. Please try again later.")
-            await state.clear()  # Clear the state machine
+            await state.clear()
             return
         
         output_image_paths.append(global_image_path)
@@ -148,7 +148,6 @@ async def handle_date(message: types.Message, state: FSMContext):
                 await message.answer(f"Error: File {image_path} not found.")
         
         # Send a classification message after sending the images
-# Send a detailed classification message after sending the images
         classification_message = (
             "🌱 Soil Moisture Classification:\n\n"
             "🔴 **Below 0.1 (Severe drought)**:\n"
