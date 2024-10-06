@@ -2,7 +2,7 @@ import earthaccess
 
 def download_data(short_name, bounding_box, date, download_path):
     # Authenticate through NASA Earthdata without passing credentials
-    auth = earthaccess.login()  # Use only login without arguments
+    auth = earthaccess.login()
 
     # Search for data with the specified date range
     results = earthaccess.search_data(
@@ -22,8 +22,8 @@ def download_data(short_name, bounding_box, date, download_path):
     print("No data found for the specified date range. Trying to expand the range...")
 
     # Expand the date range
-    new_start_date = "2024-01-01"  # Set a new start date (example)
-    new_end_date = "2024-09-30"    # Set a new end date (example)
+    new_start_date = "2024-01-01"
+    new_end_date = "2024-09-30"
 
     # Repeat the search with the new date range
     results = earthaccess.search_data(
